@@ -23,18 +23,46 @@ class BinaryNode:
         self.left_child=BinaryNode(value)
     def add_right_child(self, value: Any):
         self.right_child=BinaryNode(value)
+    def traverse_in_order(self, visit: Callable[[Any], None]):
+        if self.has_left_child()==True:
+            self.left_child.traverse_in_order(0)
+        print(self)
+        if self.has_right_child()==True:
+            self.right_child.traverse_in_order(0)
+    def traverse_post_order(self, visit: Callable[[Any], None]):
+        if self.has_left_child() == True:
+            self.left_child.traverse_post_order(0)
+        if self.has_right_child() == True:
+            self.right_child.traverse_post_order(0)
+        print(self)
+    def traverse_pre_order(self, visit: Callable[[Any], None]):
+        print (self)
+        if self.has_left_child() == True:
+            self.left_child.traverse_pre_order(0)
+        if self.has_right_child() == True:
+            self.right_child.traverse_pre_order(0)
+    def __str__ (self) -> str:
+        return str(self.value)
+    def show_auxiliary(root, string):
+        print(string +" = " + str(root.value) +"\n")
+        if root.has_left_child():
+            root.left_child.show_auxiliary( (string + " left child"))
+        if root.has_right_child():
+            root.right_child.show_auxiliary( string + " right child")
 class BinaryTree:
     root:BinaryNode
     def __init__(self, root):
         self.root=BinaryNode(root)
     def traverse_in_order(self, visit: Callable[[Any], None]):
-        return 0
+        (self.root).traverse_in_order(0)
     def traverse_post_order(self, visit: Callable[[Any], None]):
-        return 0
+        (self.root).traverse_post_order(0)
     def traverse_pre_order(self, visit: Callable[[Any], None]):
-        return 0
+        (self.root).traverse_pre_order(0)
     def show(self):
-        return 0
+        root=self.root
+        string=("root")
+        root.show_auxiliary(string)
 def print_path(root, counter):
     list_of_specific_sums =[]
     if counter ==0:
@@ -54,6 +82,27 @@ def all_paths(root,list,blist):
     if root.is_leaf()==True:
         blist.append(list)
     return blist
+def all_paths_on_special_circumstances(root,list,blist, lever):
+    list.append(root)
+    if root.has_left_child():
+        all_paths_on_special_circumstances(root.left_child,list.copy(),blist,False)
+    if root.has_right_child():
+        all_paths_on_special_circumstances(root.right_child,list.copy(),blist,False)
+    if root.is_leaf()==True:
+        blist.append(list)
+    if lever == True:
+        return blist
+def all_equal_paths_on_special_circumstances(tree: BinaryTree, sum_value: Any):
+    result=[]
+    for x in all_paths_on_special_circumstances(tree.root,[],[],True):
+        sum=0
+        for y in x:
+            sum+=y.value
+            #print(y.value)
+        if sum==sum_value:
+            #print("zgodne z suma")
+            result.append(x)
+    return result
 def all_paths_values(root,list,blist):
     list.append(root.value)
     if root.has_left_child():
@@ -113,12 +162,12 @@ drzewo1.root.right_child.add_right_child(7)
 print(all_paths(drzewo.root,[],[]))
 print(all_equal_paths(drzewo,10))
 print(all_equal_paths(drzewo1,10))
-print(all_equal_paths(tree,16))
 print(all_equal_paths_values(drzewo,10))
 print(all_equal_paths_values(tree,16))
 print(all_equal_paths_values(drzewo1,10))
+drzewo1.traverse_pre_order(0)
+drzewo1.show()
+print(all_equal_paths(tree,16))
+print(all_equal_paths_on_special_circumstances(tree,16))
 
 
-
-#ONLY ONE PATH
-#FIX RETURN
